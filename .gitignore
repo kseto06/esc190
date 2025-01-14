@@ -1,0 +1,9 @@
+*.ipynb linguist-language=ignore
+
+# Ignore .dSYM directories
+*.dSYM/
+
+# Ignore all empty files except gitignore
+*.[![:space:]]*
+*[[:space:]]*
+!.gitignore
