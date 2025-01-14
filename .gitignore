@@ -1,9 +1,7 @@
-*.ipynb linguist-language=ignore
+# Ignore Jupyter notebook
+*.ipynb linguist-detectable=false
 
-# Ignore .dSYM directories
-*.dSYM/
-
-# Ignore all empty files except gitignore
-*.[![:space:]]*
-*[[:space:]]*
-!.gitignore
+# dSYM files and blank files
+*.dsym 
+*
+!/* 
