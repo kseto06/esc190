@@ -64,12 +64,11 @@ int binary_search(term* terms, int nterms, char* substr, char* specification) {
     int right = nterms - 1;
 
     while (left <= right) {
-        int mid = left + (right-left) / 2; 
+        int mid = (int)((right+left) / 2); 
 
         //Target reached:
         if (strcmp(terms[mid].term, substr) >= 0 && strncmp(substr, terms[mid].term, strlen(substr)) == 0) {
             index = mid;
-            right = mid - 1;
             if (strcmp(specification, "left") == 0) {
                 right = mid - 1;
             } else {
