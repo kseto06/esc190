@@ -3,5 +3,5 @@
 
 # dSYM files and blank files
 *.dsym 
-*
+
 !/* 
