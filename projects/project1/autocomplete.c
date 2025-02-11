@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdbool.h>
 #include "autocomplete.h"
 
 /*
-Compiling with ASad: 
+Compiling with ASan: 
 clang -fsanitize=address -g -o autocomplete autocomplete.c
 
 Running:
@@ -35,42 +36,22 @@ void read_in_terms(term** terms, int* pnterms, char* filename) {
         return;
     }
 
-    //Count number of lines in the file
-    *pnterms = 0;
-    int i = 0;
-
+    //Count number of lines in the file, store in *pnterms
     char buffer[200]; //Buffer to store each line
-    term* p_terms = (term *)malloc((*pnterms) * sizeof(term)); //Allocate term memory
-    fseek(file, 0, SEEK_SET); //Reset to zero pointer for reading file
+    fgets(buffer, sizeof(buffer), file);
+    *pnterms = atoi(buffer); //First line contains the pnterms
+    *terms = (term *)malloc((*pnterms) * sizeof(term)); //Allocate term memory
 
-    //While loop parses through each term
-    while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        
-        //Parse through each string value, get number values and string values
-        char number[200] = "";
-        char str[200] = "";
-        for (int j = 0; buffer[j] != '\0'; j++) {
-            if (isdigit(buffer[j])) { //Appending digits to number
-                strncat(number, &buffer[j], 1);
-            } else { //Appending strs/chars to str
-                strncat(str, &buffer[j], 1);
-            }
-        }
-        // Clean first element space if any
-        while (str[0] == ' ') {
-            memmove(str, str+1, strlen(str));
-        }
-
-        strcpy(p_terms[i].term, str);
-        p_terms[i].weight = atof(number);
-        i++;
+    for (int i = 0; i < *pnterms; i++) {
+        fgets(buffer, sizeof(buffer), file);
+        char *number = strtok(buffer, "\t");
+        (*terms)[i].weight = atof(number);
+        strcpy((*terms)[i].term, strtok(NULL, "\r\n"));
     }
     fclose(file);
 
     // Lexiographic sorting - require nested compare_terms function to qsort
-    qsort(p_terms, *pnterms, sizeof(term), compare_terms);
-
-    *pnterms = i;
+    qsort(*terms, *pnterms, sizeof(term), compare_terms);
 }
 
 int binary_search(term* terms, int nterms, char* substr, char* specification) {
@@ -78,27 +59,34 @@ int binary_search(term* terms, int nterms, char* substr, char* specification) {
     Helper function:
     Returns the index of the first/last occurence of target(substr), given lowest/highest specification.
     */
+    int index = -1;
     int left = 0;
     int right = nterms - 1;
 
     while (left <= right) {
-        int mid = (int)((left+right) / 2); 
+        int mid = left + (right-left) / 2; 
 
-        //Left, case 1: first occurence; specification = "left" (lowest)
-        if (strncmp(terms[mid].term, substr, strlen(substr)) < 0 && strcmp(specification, "left")) {
-            left = mid + 1;
-        }
-        //Left, case 2: 2nd occurence; specification = "right" (highest)
-        else if (strncmp(terms[mid].term, substr, strlen(substr)) <= 0 && strcmp(specification, "right")) {
-            left = mid + 1;
-        }
-        //Right
-        else {
+        //Target reached:
+        if (strcmp(terms[mid].term, substr) >= 0 && strncmp(substr, terms[mid].term, strlen(substr)) == 0) {
+            index = mid;
             right = mid - 1;
+            if (strcmp(specification, "left") == 0) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        //negative lexicographic score
+        else if (strncmp(substr, terms[mid].term, strlen(substr)) < 0) {
+            right = mid - 1;
+        }
+        //positive
+        else {
+            left = mid + 1;
         }
     }
 
-    return left;
+    return index;
 }
 
 // Part 2
