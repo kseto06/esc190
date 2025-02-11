@@ -37,41 +37,40 @@ void read_in_terms(term** terms, int* pnterms, char* filename) {
 
     //Count number of lines in the file
     *pnterms = 0;
-    int a = 0;
+    int i = 0;
+
     char buffer[200]; //Buffer to store each line
-    while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        a++;
-    }
-    *pnterms = a;
     term* p_terms = (term *)malloc((*pnterms) * sizeof(term)); //Allocate term memory
     fseek(file, 0, SEEK_SET); //Reset to zero pointer for reading file
 
+    //While loop parses through each term
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        // Parse through each term
-        for (int i = 0; i < *pnterms; i++) {
-            //Parse through each string value, get number values and string values
-            char number[200] = "";
-            char str[200] = "";
-            for (int j = 0; buffer[j] != '\0'; j++) {
-                if (isdigit(buffer[j])) { //Appending digits to number
-                    strncat(number, &buffer[j], 1);
-                } else { //Appending strs/chars to str
-                    strncat(str, &buffer[j], 1);
-                }
+        
+        //Parse through each string value, get number values and string values
+        char number[200] = "";
+        char str[200] = "";
+        for (int j = 0; buffer[j] != '\0'; j++) {
+            if (isdigit(buffer[j])) { //Appending digits to number
+                strncat(number, &buffer[j], 1);
+            } else { //Appending strs/chars to str
+                strncat(str, &buffer[j], 1);
             }
-            // Clean first element space if any
-            while (str[0] == ' ') {
-                memmove(str, str+1, strlen(str));
-            }
-
-            strcpy(p_terms[i].term, str);
-            p_terms[i].weight = atof(number);
         }
+        // Clean first element space if any
+        while (str[0] == ' ') {
+            memmove(str, str+1, strlen(str));
+        }
+
+        strcpy(p_terms[i].term, str);
+        p_terms[i].weight = atof(number);
+        i++;
     }
     fclose(file);
 
     // Lexiographic sorting - require nested compare_terms function to qsort
     qsort(p_terms, *pnterms, sizeof(term), compare_terms);
+
+    *pnterms = i;
 }
 
 int binary_search(term* terms, int nterms, char* substr, char* specification) {
@@ -145,7 +144,7 @@ int main(void)
     }
 
     printf("%d\n", lowest_match(terms, nterms, "Tor"));
-    // highest_match(terms, nterms, "Tor");
+    printf("%d\n", highest_match(terms, nterms, "Tor"));
     
     // struct term *answer;
     // int n_answer;
