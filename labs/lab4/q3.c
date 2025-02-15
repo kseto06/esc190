@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <string.h>
+
 typedef struct student1 {
     char name[3];
     int age;

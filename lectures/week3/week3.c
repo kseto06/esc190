@@ -1,13 +1,13 @@
 
-# include <stdio.h>
+// # include <stdio.h>
 
-int main() {
-    int a = 42;
+// int main() {
+//     int a = 42;
 
-    printf("%d  ", a);
+//     printf("%d  ", a);
 
-    printf("%ld ", &a);
+//     printf("%ld ", &a);
 
-    printf("%ld ", *a);
-    return 0;
-}
+//     printf("%ld ", *a);
+//     return 0;
+// }
