@@ -3,8 +3,6 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdbool.h>
-#include "autocomplete.h"
-
 /*
 Compiling with ASan: 
 clang -fsanitize=address -g -o autocomplete autocomplete.c
@@ -15,6 +13,10 @@ Running:
 
 // Part 1
 
+typedef struct term {
+    char term[200];
+    long long weight;
+} term;
 //Helper function for lexicographic sorting
 int compare_terms(const void *a, const void *b) {
     return strcmp(((const term *)a)->term, ((const term *)b)->term); //Compare terms of a and b with strcmp
@@ -47,6 +49,7 @@ void read_in_terms(term** terms, int* pnterms, char* filename) {
         char *number = strtok(buffer, "\t");
         (*terms)[i].weight = atof(number);
         strcpy((*terms)[i].term, strtok(NULL, "\r\n"));
+        
     }
     fclose(file);
 
@@ -102,41 +105,31 @@ int highest_match(struct term* terms, int nterms, char* substr) {
     return binary_search(terms, nterms, substr, "right");
 }
 
-// Part 4
-void autocomplete(term** answer, int *n_answer, term* terms, int nterms, char* substr) {
-    /*
-    The function takes terms (assume it is sorted lexicographically in increasing order), the number of
-    terms nterms, and the query string substr, and places the answers in answer, with *n_answer being the
-    number of answers. The answers should be sorted by weight in non-decreasing order.
-        Sorting with qsort
-        See here: https://www.tutorialspoint.com/c_standard_library/c_function_qsort.htm
-        You must use qsort for this question.
-    */
+
+int compare(const void * a, const void * b){
+    term *term_a = (struct term *)a;
+    term *term_b = (struct term *)b;
+    return term_b->weight - term_a->weight;
 }
 
-int main(void)
-{
-    struct term *terms;
-    int nterms;
-    read_in_terms(&terms, &nterms, "cities.txt");
+void autocomplete(struct term **answer, int *n_answer, struct term *terms, int nterms, char *substr){
+    int hm = highest_match(terms, nterms, substr);
+    int lm = lowest_match(terms, nterms, substr);
 
-    // Test 1: Try printing first 10 terms
-    if (terms == NULL) {
-        fprintf(stderr, "Error: 'terms' is NULL after read_in_terms. Aborting.\n");
-        return 1; // Exit with an error code
+    if (hm < 0 || lm < 0){
+        *n_answer = 0;
+        return;
     }
 
-    for (int i = 0; i < 10; i++) {
-        printf("%s, %f\n", terms[i].term, terms[i].weight);
-    }
+    *n_answer = (hm - lm) + 1;
+    *answer = (term*)malloc(sizeof(term) * (*n_answer));
 
-    printf("%d\n", lowest_match(terms, nterms, "Tor"));
-    printf("%d\n", highest_match(terms, nterms, "Tor"));
-    
-    // struct term *answer;
-    // int n_answer;
-    // autocomplete(&answer, &n_answer, terms, nterms, "Tor");
-    //free allocated blocks here -- not required for the project, but good practice
-    free(terms);
-    return 0;
+    int num = 0;
+
+    for (int i = lm; i < lm + *n_answer; i++){
+        strcpy((*answer + num)->term, (terms + i)->term);
+        (*answer + num)->weight = (terms + i)->weight;
+        num++;
+    }
+    qsort(*answer, *n_answer, sizeof(term), compare);
 }
