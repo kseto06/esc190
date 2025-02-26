@@ -1,0 +1,10 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     midter2023
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _LL_append, symObjAddr: 0x0, symBinAddr: 0x10000328C, symSize: 0x274 }
+  - { offsetInCU: 0x3B, offset: 0x3B, size: 0x8, addend: 0x0, symName: _.str, symObjAddr: 0xA40, symBinAddr: 0x100003DA0, symSize: 0x0 }
+  - { offsetInCU: 0x9B, offset: 0x9B, size: 0x8, addend: 0x0, symName: _LL_append, symObjAddr: 0x0, symBinAddr: 0x10000328C, symSize: 0x274 }
+  - { offsetInCU: 0xE9, offset: 0xE9, size: 0x8, addend: 0x0, symName: _strcat_rec, symObjAddr: 0x274, symBinAddr: 0x100003500, symSize: 0x27C }
+  - { offsetInCU: 0x11F, offset: 0x11F, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x4F0, symBinAddr: 0x10000377C, symSize: 0x498 }
+...
