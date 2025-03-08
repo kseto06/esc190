@@ -9,7 +9,7 @@
 					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
-						"string" : "3.10"
+						"string" : "3.29"
 					},
 					"projectIndex" : 0,
 					"source" : ".",
@@ -27,7 +27,7 @@
 					[
 						0
 					],
-					"name" : "MyCProject",
+					"name" : "esc190",
 					"targetIndexes" : 
 					[
 						0
@@ -38,9 +38,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "MyCExecutable::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-MyCExecutable-Debug-8bfb7425b37926297fdf.json",
-					"name" : "MyCExecutable",
+					"id" : "esc190::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-esc190-Debug-643cb8e283188b706f0e.json",
+					"name" : "esc190",
 					"projectIndex" : 0
 				}
 			]
