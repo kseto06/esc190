@@ -1,3 +1,4 @@
 # Ignore Jupyter notebook
 
 *.ipynb linguist-detectable=false
+*.py linguist-detectable=True
