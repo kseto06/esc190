@@ -1,2 +1,11 @@
-# Ignore Jupyter notebook
-*.ipynb linguist-detectable=false
+week1/*.ipynb linguist-language=C
+week2/*.ipynb linguist-language=C
+week3/*.ipynb linguist-language=C
+week4/*.ipynb linguist-language=C
+week5/*.ipynb linguist-language=C
+week6/*.ipynb linguist-language=C
+week7/*.ipynb linguist-language=C
+
+week8/*.ipynb linguist-language=Python
+week9/*.ipynb linguist-language=Python
+week10/*.ipynb linguist-language=Python
