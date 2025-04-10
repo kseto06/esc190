@@ -1,8 +1,5 @@
 *.DS_Store
 
-# Ignore Jupyter notebook
-*.ipynb linguist-detectable=false
-
 # dSYM files and blank files
 *.dsym 
 
