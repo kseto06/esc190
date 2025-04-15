@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 void change_a(int *p_a, int num) {
-    *p_a = num;
+    p_a[2] = num;
 }
 
 int main() {
